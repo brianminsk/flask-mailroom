@@ -5,6 +5,8 @@ from flask import Flask, render_template, request, redirect, url_for, session
 
 from model import Donor, Donation, db
 
+from peewee import DoesNotExist
+
 app = Flask(__name__)
 
 @app.route('/')
@@ -27,7 +29,7 @@ def new_donation():
         with db:
             try:
                 donor = Donor.get(Donor.name == donor_name)
-            except peewee.DoesNotExist:
+            except DoesNotExist:
                 donor = Donor(name=donor_name)
                 donor.save()
 
@@ -36,7 +38,6 @@ def new_donation():
         return redirect(url_for('all'))
     else:
         return render_template('new.jinja2')
-
 
 
 if __name__ == "__main__":
